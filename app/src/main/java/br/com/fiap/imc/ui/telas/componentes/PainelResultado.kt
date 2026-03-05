@@ -20,10 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.imc.classificarImc
 import br.com.fiap.imc.ui.theme.IMCTheme
 
 @Composable
-fun PainelResultado(modifier: Modifier = Modifier) {
+fun PainelResultado(imc: Double = 0.0) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,12 +48,12 @@ fun PainelResultado(modifier: Modifier = Modifier) {
                     .background(Color.Transparent)
             ){
                 Text(
-                    text = "23.9",
+                    text = String.format("%.2f", imc),
                     fontSize = 64.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Normal",
+                    text = classificarImc(imc),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF009688),

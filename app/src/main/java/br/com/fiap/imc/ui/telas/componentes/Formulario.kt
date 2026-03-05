@@ -1,5 +1,6 @@
 package br.com.fiap.imc.ui.telas.componentes
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,14 +31,23 @@ import br.com.fiap.imc.classificarImc
 import br.com.fiap.imc.ui.theme.IMCTheme
 
 @Composable
-fun Formulario(aoCalcular: () -> Double) {
+fun Formulario(aoCalcular: (Double) -> Unit) {
+
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences(
+        "dados",
+        Context.MODE_PRIVATE
+    )
+
+    //val pesoSalvo = sharedPreferences.getString("peso", "")
+    val alturaSalvo = sharedPreferences.getString("altura", "")
 
     var peso by remember {
-        mutableStateOf("")
+        mutableStateOf( "") // Elvis Operator
     }
 
     var altura by remember {
-        mutableStateOf("")
+        mutableStateOf(alturaSalvo ?: "")
     }
 
     Column(
@@ -110,7 +121,19 @@ fun Formulario(aoCalcular: () -> Double) {
             }
             //Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = aoCalcular,
+                onClick = {
+                    val edit = sharedPreferences.edit()
+                    edit.putString("peso", peso)
+                    edit.putString("altura", altura)
+                    edit.apply()
+
+                    aoCalcular(
+                        calcularImc(
+                            peso = peso.toInt(),
+                            altura = altura.toDouble()
+                        )
+                    )
+                } ,
                 shape = RoundedCornerShape(
                     size = 8.dp
                 ),
