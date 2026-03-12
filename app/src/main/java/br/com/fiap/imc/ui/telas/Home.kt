@@ -43,7 +43,7 @@ fun HomeScreen(navController: NavHostController) {
         }
         Button(
             onClick = {
-                navController.navigate("telaImc")
+                navController.navigate("lista")
             },
             modifier = Modifier
                 .padding(bottom = 32.dp)

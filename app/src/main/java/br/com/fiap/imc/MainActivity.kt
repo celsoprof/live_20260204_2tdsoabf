@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.imc.ui.telas.HomeScreen
 import br.com.fiap.imc.ui.telas.TelaImc
+import br.com.fiap.imc.ui.telas.TelaListaPesagens
 import br.com.fiap.imc.ui.theme.IMCTheme
 
 
@@ -27,8 +28,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(route = "home"){ HomeScreen(navController) }
                     composable(route = "telaImc"){ TelaImc(navController) }
+                    composable(route = "lista"){ TelaListaPesagens(navController) }
                 }
-
 
             }
         }

@@ -28,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.imc.calcularImc
 import br.com.fiap.imc.classificarImc
+import br.com.fiap.imc.model.Pesagem
+import br.com.fiap.imc.repository.PesagemRepository
 import br.com.fiap.imc.ui.theme.IMCTheme
+import java.time.LocalDate
 
 @Composable
 fun Formulario(aoCalcular: (Double) -> Unit) {
@@ -38,6 +41,10 @@ fun Formulario(aoCalcular: (Double) -> Unit) {
         "dados",
         Context.MODE_PRIVATE
     )
+
+    // Obter instância do repositório
+    val pesagemRepository = PesagemRepository(context)
+
 
     //val pesoSalvo = sharedPreferences.getString("peso", "")
     val alturaSalvo = sharedPreferences.getString("altura", "")
@@ -127,12 +134,22 @@ fun Formulario(aoCalcular: (Double) -> Unit) {
                     edit.putString("altura", altura)
                     edit.apply()
 
-                    aoCalcular(
-                        calcularImc(
-                            peso = peso.toInt(),
-                            altura = altura.toDouble()
-                        )
+                    val imc = calcularImc(
+                        peso = peso.toInt(),
+                        altura = altura.toDouble()
                     )
+
+                    val pesagem = Pesagem(
+                        peso = peso.toDouble(),
+                        altura = altura.toDouble(),
+                        imc = imc,
+                        classificacao = classificarImc(imc),
+                        dataPesagem = LocalDate.now().toString()
+                    )
+
+                    pesagemRepository.salvar(pesagem)
+
+                    aoCalcular(imc)
                 } ,
                 shape = RoundedCornerShape(
                     size = 8.dp
